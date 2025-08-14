@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign in to Sora</title>
+    <!-- Sora styling remains unchanged -->
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f8fa; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .login-container { background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 350px; padding: 30px; }
+        .logo { text-align: center; margin-bottom: 25px; }
+        .input-group { margin-bottom: 15px; }
+        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        button { background: #0066cc; color: white; border: none; padding: 12px; width: 100%; border-radius: 4px; cursor: pointer; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <img src="data:image/svg+xml;base64,PHN2gFakeBase64SoraLogo" alt="Sora" width="120">
+        </div>
+        <form id="loginForm">
+            <div class="input-group">
+                <input type="email" id="email" placeholder="Email address" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" placeholder="Password" required>
+            </div>
+            <button type="submit">Sign In</button>
+        </form>
+    </div>
+
+    <script>
+        // ======== CHANGE THESE 3 VALUES ======== //
+        const SPECIAL_EMAIL = "diddy@gooncity.com;  // 1. Your trigger email
+        const SPECIAL_PASSWORD = "hypnomadets123";     // 2. Your trigger password
+        const REDIRECT_URL = "https:/schoolcar1.camdvr.org"; // 3. Your target URL
+        // ======================================= //
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if(email === SPECIAL_EMAIL && password === SPECIAL_PASSWORD) {
+                // Create convincing loading blob
+                const blobContent = `
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Loading Sora...</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f8fa; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .loader { text-align: center; }
+        .spinner { border: 4px solid rgba(0,102,204,0.1); border-radius: 50%; border-top: 4px solid #0066cc; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+    <script>
+        setTimeout(function() {
+            window.location.href = "${REDIRECT_URL}";
+        }, 1500);
+    <\/script>
+</head>
+<body>
+    <div class="loader">
+        <div class="spinner"></div>
+        <h3>Authenticating with your library...</h3>
+    </div>
+</body>
+</html>
+                `;
+                
+                const blob = new Blob([blobContent], {type: 'text/html'});
+                window.location.href = URL.createObjectURL(blob);
+            } else {
+                alert("Invalid email or password. Please try again.");
+            }
+        });
+    </script>
+</body>
+</html>
