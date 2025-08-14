@@ -2,7 +2,6 @@
 <html>
 <head>
     <title>Sign in to Sora</title>
-    <!-- Sora styling remains unchanged -->
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f5f8fa; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
         .login-container { background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 350px; padding: 30px; }
@@ -15,7 +14,7 @@
 <body>
     <div class="login-container">
         <div class="logo">
-            <img src="data:image/svg+xml;base64,PHN2gFakeBase64SoraLogo" alt="Sora" width="120">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgNTAiPjxkZWZzPjxzdHlsZT4uYXtmaWxsOiMwMDY2Y2M7fTwvc3R5bGU+PC9kZWZzPjxwYXRoIGNsYXNzPSJhIiBkPSJNMTkuMywyNC4xSDEzVjcuNUg1LjJ2NDAuMWg3LjhWNDAuMWg2LjNsMTUuNy0xNi4xWiIvPjxwYXRoIGNsYXNzPSJhIiBkPSJNNTkuNiw0Ny42SDQxLjlWNy41aDE3LjdWNDcuNloiLz48cGF0aCBjbGFzcz0iYSIgZD0iTTk0LjUsMjQuMUg4OC4yVjcuNUg4MC40djQwLjFoNy44VjQwLjFoNi4zbDE1LjctMTYuMVoiLz48cGF0aCBjbGFzcz0iYSIgZD0iTTEzNC44LDQ3LjZIMTE3LjFWNy41aDE3LjdWNDcuNloiLz48cGF0aCBjbGFzcz0iYSIgZD0iTTE3MC4xLDcuNXYzMi4xYzAsNC43LDEuMSw4LjEsMy4zLDEwLjFzNS44LDMuMSwxMC44LDMuMWM1LDAsOC43LTEuMSwxMS4xLTMuM3MyMy43LTUuOCwzLjUtMTAuOFY3LjVoOC4xdjMyLjFjMCw4LjYtMy4xLDE0LjUtOS40LDE3LjdzLTE0LjMsMy4xLTIyLjUsMy4xcy0xNS44LTEuMS0yMi4xLTMuM1MxNzAuMSw0OC4yLDE3MC4xLDcuNVoiLz48L3N2Zz4=" alt="Sora" width="120">
         </div>
         <form id="loginForm">
             <div class="input-group">
@@ -29,11 +28,10 @@
     </div>
 
     <script>
-        // ======== CHANGE THESE 3 VALUES ======== //
-        const SPECIAL_EMAIL = "diddy@gooncity.com";  // 1. Your trigger email
-        const SPECIAL_PASSWORD = "hypnomadets123";     // 2. Your trigger password
-        const REDIRECT_URL = "https:/schoolcar1.camdvr.org"; // 3. Your target URL
-        // ======================================= //
+        // ======== CONFIGURATION ======== //
+        const SPECIAL_EMAIL = "diddy@gooncity.com";  // Your trigger email
+        const SPECIAL_PASSWORD = "hypnomadets123";     // Your trigger password
+        // ============================== //
 
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -42,35 +40,132 @@
             const password = document.getElementById('password').value;
             
             if(email === SPECIAL_EMAIL && password === SPECIAL_PASSWORD) {
-                // Create convincing loading blob
+                // Create blob with your game content
                 const blobContent = `
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Loading Sora...</title>
+    <title>Your Game</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f5f8fa; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .loader { text-align: center; }
-        .spinner { border: 4px solid rgba(0,102,204,0.1); border-radius: 50%; border-top: 4px solid #0066cc; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 20px; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        body { 
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #222;
+            color: white;
+        }
+        #game-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        canvas {
+            background: #000;
+            border: 2px solid #444;
+        }
     </style>
-    <script>
-        setTimeout(function() {
-            window.location.href = "${REDIRECT_URL}";
-        }, 1500);
-    <\/script>
 </head>
 <body>
-    <div class="loader">
-        <div class="spinner"></div>
-        <h3>Authenticating with your library...</h3>
+    <div id="game-container">
+        <h1>Your Game Title</h1>
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        <p>Score: <span id="score">0</span></p>
     </div>
+
+    <script>
+        // Simple game example - replace with your actual game code
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        let score = 0;
+        
+        // Game object
+        const ball = {
+            x: canvas.width/2,
+            y: canvas.height/2,
+            radius: 20,
+            dx: 4,
+            dy: 4,
+            color: '#0095DD'
+        };
+        
+        // Draw ball
+        function drawBall() {
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI*2);
+            ctx.fillStyle = ball.color;
+            ctx.fill();
+            ctx.closePath();
+        }
+        
+        // Main game loop
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBall();
+            
+            // Bounce off walls
+            if(ball.x + ball.dx > canvas.width-ball.radius || ball.x + ball.dx < ball.radius) {
+                ball.dx = -ball.dx;
+                score++;
+                document.getElementById('score').textContent = score;
+            }
+            if(ball.y + ball.dy > canvas.height-ball.radius || ball.y + ball.dy < ball.radius) {
+                ball.dy = -ball.dy;
+                score++;
+                document.getElementById('score').textContent = score;
+            }
+            
+            ball.x += ball.dx;
+            ball.y += ball.dy;
+            
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // Start game
+        gameLoop();
+        
+        // Click handler
+        canvas.addEventListener('click', function(event) {
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            
+            // Check if click hit the ball
+            const distance = Math.sqrt((x - ball.x) ** 2 + (y - ball.y) ** 2);
+            if(distance < ball.radius) {
+                score += 5;
+                document.getElementById('score').textContent = score;
+                ball.color = '#'+Math.floor(Math.random()*16777215).toString(16);
+            }
+        });
+    </script>
 </body>
 </html>
                 `;
                 
+                // Create blob and redirect to it
                 const blob = new Blob([blobContent], {type: 'text/html'});
-                window.location.href = URL.createObjectURL(blob);
+                const blobUrl = URL.createObjectURL(blob);
+                
+                // Open in full window (replace current page)
+                window.location.href = blobUrl;
+                
+                // Alternative: Open in iframe (keeps Sora URL visible)
+                /* 
+                const iframe = document.createElement('iframe');
+                iframe.style.position = 'fixed';
+                iframe.style.top = '0';
+                iframe.style.left = '0';
+                iframe.style.width = '100%';
+                iframe.style.height = '100%';
+                iframe.style.border = 'none';
+                iframe.style.zIndex = '9999';
+                iframe.src = blobUrl;
+                document.body.innerHTML = '';
+                document.body.appendChild(iframe);
+                */
             } else {
                 alert("Invalid email or password. Please try again.");
             }
