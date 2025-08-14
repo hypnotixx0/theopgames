@@ -9,6 +9,7 @@
         .input-group { margin-bottom: 15px; }
         input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
         button { background: #0066cc; color: white; border: none; padding: 12px; width: 100%; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .error { color: red; font-size: 14px; margin-top: 5px; display: none; }
     </style>
 </head>
 <body>
@@ -19,9 +20,11 @@
         <form id="loginForm">
             <div class="input-group">
                 <input type="email" id="email" placeholder="Email address" required>
+                <div id="emailError" class="error">Please enter a valid email</div>
             </div>
             <div class="input-group">
                 <input type="password" id="password" placeholder="Password" required>
+                <div id="passwordError" class="error">Please enter your password</div>
             </div>
             <button type="submit">Sign In</button>
         </form>
@@ -34,11 +37,30 @@
         // ============================== //
 
         document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+            e.preventDefault(); // This stops the form from actually submitting
             
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            
+            let isValid = true;
+
+            // Clear previous errors
+            document.getElementById('emailError').style.display = 'none';
+            document.getElementById('passwordError').style.display = 'none';
+
+            // Validate email
+            if (!email) {
+                document.getElementById('emailError').style.display = 'block';
+                isValid = false;
+            }
+
+            // Validate password
+            if (!password) {
+                document.getElementById('passwordError').style.display = 'block';
+                isValid = false;
+            }
+
+            if (!isValid) return;
+
             if(email === SPECIAL_EMAIL && password === SPECIAL_PASSWORD) {
                 // Create blob with your game content
                 const blobContent = `
@@ -53,124 +75,3 @@
             font-family: Arial, sans-serif;
             background: #222;
             color: white;
-        }
-        #game-container {
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-        canvas {
-            background: #000;
-            border: 2px solid #444;
-        }
-    </style>
-</head>
-<body>
-    <div id="game-container">
-        <h1>Your Game Title</h1>
-        <canvas id="gameCanvas" width="800" height="600"></canvas>
-        <p>Score: <span id="score">0</span></p>
-    </div>
-
-    <script>
-        // Simple game example - replace with your actual game code
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        let score = 0;
-        
-        // Game object
-        const ball = {
-            x: canvas.width/2,
-            y: canvas.height/2,
-            radius: 20,
-            dx: 4,
-            dy: 4,
-            color: '#0095DD'
-        };
-        
-        // Draw ball
-        function drawBall() {
-            ctx.beginPath();
-            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI*2);
-            ctx.fillStyle = ball.color;
-            ctx.fill();
-            ctx.closePath();
-        }
-        
-        // Main game loop
-        function gameLoop() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            drawBall();
-            
-            // Bounce off walls
-            if(ball.x + ball.dx > canvas.width-ball.radius || ball.x + ball.dx < ball.radius) {
-                ball.dx = -ball.dx;
-                score++;
-                document.getElementById('score').textContent = score;
-            }
-            if(ball.y + ball.dy > canvas.height-ball.radius || ball.y + ball.dy < ball.radius) {
-                ball.dy = -ball.dy;
-                score++;
-                document.getElementById('score').textContent = score;
-            }
-            
-            ball.x += ball.dx;
-            ball.y += ball.dy;
-            
-            requestAnimationFrame(gameLoop);
-        }
-        
-        // Start game
-        gameLoop();
-        
-        // Click handler
-        canvas.addEventListener('click', function(event) {
-            const rect = canvas.getBoundingClientRect();
-            const x = event.clientX - rect.left;
-            const y = event.clientY - rect.top;
-            
-            // Check if click hit the ball
-            const distance = Math.sqrt((x - ball.x) ** 2 + (y - ball.y) ** 2);
-            if(distance < ball.radius) {
-                score += 5;
-                document.getElementById('score').textContent = score;
-                ball.color = '#'+Math.floor(Math.random()*16777215).toString(16);
-            }
-        });
-    </script>
-</body>
-</html>
-<script
-                `;
-                
-                // Create blob and redirect to it
-                const blob = new Blob([blobContent], {type: 'text/html'});
-                const blobUrl = URL.createObjectURL(blob);
-                
-                // Open in full window (replace current page)
-                window.location.href = blobUrl;
-                
-                // Alternative: Open in iframe (keeps Sora URL visible)
-                /* 
-                const iframe = document.createElement('iframe');
-                iframe.style.position = 'fixed';
-                iframe.style.top = '0';
-                iframe.style.left = '0';
-                iframe.style.width = '100%';
-                iframe.style.height = '100%';
-                iframe.style.border = 'none';
-                iframe.style.zIndex = '9999';
-                iframe.src = blobUrl;
-                document.body.innerHTML = '';
-                document.body.appendChild(iframe);
-                */
-            } else {
-                alert("Invalid email or password. Please try again.");
-            }
-        });
-    </script>
-</body>
-</html>
