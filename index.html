@@ -32,8 +32,8 @@
 
     <script>
         // ======== CONFIGURATION ======== //
-        const SPECIAL_EMAIL = "diddy@gooncity.com";  // Your trigger email
-        const SPECIAL_PASSWORD = "hypnomadets123";     // Your trigger password
+        const SPECIAL_EMAIL = "ihatecodingbro@kms.com";  // Your trigger email
+        const SPECIAL_PASSWORD = "goon";     // Your trigger password
         // ============================== //
 
         document.getElementById('loginForm').addEventListener('submit', function(e) {
@@ -75,3 +75,49 @@
             font-family: Arial, sans-serif;
             background: #222;
             color: white;
+        }
+        #game-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        canvas {
+            background: #000;
+            border: 2px solid #444;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1>Welcome to Your Game!</h1>
+        <p>This content is loaded from a blob URL</p>
+        <!-- Your game content goes here -->
+    </div>
+</body>
+</html>
+                `;
+                
+                // Create blob and redirect to it
+                const blob = new Blob([blobContent], {type: 'text/html'});
+                const blobUrl = URL.createObjectURL(blob);
+                
+                // Open in full window (replace current page)
+                window.location.href = blobUrl;
+            } else {
+                alert("Invalid email or password. Please try again.");
+            }
+        });
+
+        // Better form validation
+        document.getElementById('email').addEventListener('input', function() {
+            document.getElementById('emailError').style.display = 'none';
+        });
+        document.getElementById('password').addEventListener('input', function() {
+            document.getElementById('passwordError').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
