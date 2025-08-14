@@ -64,60 +64,92 @@
             if(email === SPECIAL_EMAIL && password === SPECIAL_PASSWORD) {
                 // Create blob with your game content
                 const blobContent = `
+const blobContent = `
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Your Game</title>
+    <title>Your Content</title>
     <style>
-        body { 
+        html, body {
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-            background: #222;
-            color: white;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* Prevents scrollbars */
         }
-        #game-container {
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-        canvas {
-            background: #000;
-            border: 2px solid #444;
+        #content-frame {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;   /* 100% of viewport width */
+            height: 100vh;  /* 100% of viewport height */
+            border: none;   /* No borders */
+            margin: 0;
+            padding: 0;
         }
     </style>
 </head>
 <body>
-    <div id="game-container">
-        <h1>Welcome to Your Game!</h1>
-        <p>This content is loaded from a blob URL</p>
-        <!-- Your game content goes here -->
-    </div>
-</body>
-</html>
-                `;
-                
-                // Create blob and redirect to it
-                const blob = new Blob([blobContent], {type: 'text/html'});
-                const blobUrl = URL.createObjectURL(blob);
-                
-                // Open in full window (replace current page)
-                window.location.href = blobUrl;
-            } else {
-                alert("Invalid email or password. Please try again.");
-            }
+    <!-- Replace with your actual content URL -->
+    <iframe id="content-frame" src="https://3kh0.bitbucket.io/projects/tube-jumpers/index.html" 
+            allowfullscreen></iframe>
+
+    <script>
+        // Optional: Force resize on orientation changes
+        window.addEventListener('resize', function() {
+            document.getElementById('content-frame').style.width = '100vw';
+            document.getElementById('content-frame').style.height = '100vh';
         });
 
-        // Better form validation
-        document.getElementById('email').addEventListener('input', function() {
-            document.getElementById('emailError').style.display = 'none';
-        });
-        document.getElementById('password').addEventListener('input', function() {
-            document.getElementById('passwordError').style.display = 'none';
-        });
+        // Mobile viewport hack (prevents zooming)
+        document.addEventListener('touchmove', function(e) {
+            if (e.scale !== 1) { e.preventDefault(); }
+        }, { passive: false });
     </script>
 </body>
 </html>
+`;
+
+## Key Features:
+
+1. **Perfect Viewport Fit**
+   - Uses `100vw` and `100vh` units to always fill the screen
+   - `position: fixed` prevents any parent element interference
+
+2. **Borderless Design**
+   - Explicit `border: none` declaration
+   - No margins or padding
+
+3. **Responsive Handling**
+   - Automatically adjusts to:
+     - Desktop screens
+     - Tablets
+     - Mobile phones
+   - Handles screen rotation changes
+
+4. **Mobile Optimization**
+   - Prevents unwanted zooming
+   - Disables scrollbars
+
+5. **Fullscreen Support**
+   - Includes `allowfullscreen` attribute for potential fullscreen mode
+
+## Implementation Notes:
+
+1. Replace `https://your-game-site.com` with your actual content URL
+2. This code goes in your existing blob generator where you set `blobContent`
+3. No changes needed to your login page code - just update what's inside the blob
+
+## Testing Recommendations:
+
+1. Try on different devices:
+   - Phones in portrait/landscape
+   - Tablets
+   - Desktop browsers
+
+2. Test with:
+   - Screen rotation
+   - Browser zoom
+   - Different window sizes
+
+This solution will create a seamless, borderless viewing experience that automatically adapts to any screen size while maintaining all your existing security and cloaking functionality.
